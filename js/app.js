@@ -5,7 +5,7 @@ $(document).ready(function() {
     $("#attempted-word-form").submit(function(evt) {
         evt.preventDefault();
         var word = $("#textbox").val();
-        addNewWord(word);
+        addNewWordSubmission(word);
         render();
     });
 
@@ -35,14 +35,12 @@ var model = {
     currentAttempt: ""
 }
 
-function addNewWord(word) {
+function addNewWordSubmission(word) {
     var alreadyUsed = model.wordSubmissions.filter(function(sub) {
         return sub.word === word;
     }).length > 0;
     if (containsOnlyValidChars(word) && !alreadyUsed) {
-        model.wordSubmissions.push({
-            word: word
-        });
+        model.wordSubmissions.push({ word: word });
     }
     model.currentAttempt = "";
 }
