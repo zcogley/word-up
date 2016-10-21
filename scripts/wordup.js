@@ -41,6 +41,7 @@ function addNewWordSubmission(word) {
     }).length > 0;
     if (containsOnlyValidChars(word) && !alreadyUsed) {
         model.wordSubmissions.push({ word: word });
+        checkWordExists(word);
     }
     model.currentAttempt = "";
 }
@@ -51,33 +52,35 @@ function startGame() {
     model.validChars = generateValidChars();
     model.wordSubmissions = [];
     model.currentAttempt = "";
-    clearTimeout(model.timer);
     model.timer = tickTimer();
+}
+
+function endGame() {
+    clearTimeout(model.timer);
 }
 
 function tickTimer() {
     return setTimeout(function() {
         model.secondsRemaining = Math.max(0, model.secondsRemaining - 1);
         render();
-        if (model.gameHasStarted && model.secondsRemaining > 0) {
+        var stillTimeLeft = model.gameHasStarted && model.secondsRemaining > 0
+        if (stillTimeLeft) {
             model.timer = tickTimer();
+        }
+        else {
+            endGame();
         }
     }, 1000);
 }
-
-
 
 function checkWordExists(word) {
     $.ajax({
         url: "http://api.pearson.com/v2/dictionaries/entries?headword=" + word,
         success: function(response) {
-            model.wordSubmissions = model.wordSubmissions.map(function(sub) {
+            var isRealWord = response.results.length > 0;
+            model.wordSubmissions.forEach(function(sub) {
                 if (sub.word === word) {
-                    var isRealWord = response.results.length > 0;
-                    return { word: word, isRealWord: isRealWord };
-                }
-                else {
-                    return sub;
+                    sub.isRealWord = isRealWord;
                 }
             });
             render();
@@ -109,7 +112,6 @@ function render() {
     }
 
     $("#game").show();
-    $("#postgame").hide();
     $("#valid-chars").append(model.validChars.map(charElem));
     $("#textbox").attr("disabled", false);
     $("#textbox").focus();
@@ -142,9 +144,6 @@ function wordElem(wordSubmission) {
             .attr("class", "tag tag-sm")
             .addClass(wordSubmission.isRealWord ? "tag-success" : "tag-danger");
         elem.append(badge);
-    }
-    else {
-        checkWordExists(wordSubmission.word);
     }
     return elem;
 }
@@ -212,7 +211,7 @@ function currentScore() {
 // UTILS
 
 function add(a, b) {
-        return a + b;
+    return a + b;
 }
 
 function chooseN(n, items) {
