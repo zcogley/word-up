@@ -12,7 +12,7 @@ input {
 }
 
 input:focus {
-    border: 2px solid blue;
+    border: 2px solid #4285F4;
     outline: none;
 }
 
@@ -21,7 +21,7 @@ form {
 }
 
 .bad-attempt {
-    color: red;
+    color: #d9534f;
 }
 
 .valid-char {
