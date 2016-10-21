@@ -75,8 +75,9 @@ function tickTimer() {
 
 function checkWordExists(word) {
     $.ajax({
-        url: "http://api.pearson.com/v2/dictionaries/entries?headword=" + word,
+        url: "http://api.pearson.com/v2/dictionaries/wordwise/entries?headword=" + word,
         success: function(response) {
+            console.log(response.results);
             var isRealWord = response.results.length > 0;
             model.wordSubmissions.forEach(function(sub) {
                 if (sub.word === word) {
