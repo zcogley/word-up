@@ -47,7 +47,7 @@ function addNewWordSubmission(word) {
     }).length > 0;
 
     // if the word is valid and hasn't already been used, add it
-    if (containsOnlyAllowedLetters(word) && !alreadyUsed) {
+    if (containsOnlyAllowedLetters(word) && alreadyUsed == false) {
         model.wordSubmissions.push({ word: word });
         // now we must also determine whether this is actually a real word
         checkIfWordIsReal(word);
@@ -69,15 +69,15 @@ function checkIfWordIsReal(word) {
         url: "http://api.pearson.com/v2/dictionaries/wordwise/entries?headword=" + word,
         success: function(response) {
             // we received an answer from Pearson
-            console.log(response.results);
+            console.log(response);
 
             // if there are any results, the word is legitimate. Otherwise, it's not.
             var isRealWord = response.results.length > 0;
 
             // update the corresponding wordSubmission in the model
-            model.wordSubmissions.forEach(function(sub) {
-                if (sub.word === word) {
-                    sub.isRealWord = isRealWord;
+            model.wordSubmissions.forEach(function(submission) {
+                if (submission.word === word) {
+                    submission.isRealWord = isRealWord;
                 }
             });
 
@@ -140,6 +140,7 @@ $(document).ready(function() {
         render();
     });
 
+    // initial render
     render();
 });
 
@@ -248,7 +249,7 @@ function disallowedLetterElem(letter) {
 
 
 
-// GAME LOGIC
+// ----------------- GAME LOGIC -----------------
 
 // borrowing Scrabble's point system
 var scrabblePointsForEachLetter = {
@@ -326,7 +327,7 @@ function currentScore() {
 }
 
 
-// UTILS
+// ----------------- UTILS -----------------
 
 /**
  * randomly selects n items from a list,
