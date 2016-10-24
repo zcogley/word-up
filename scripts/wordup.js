@@ -214,7 +214,7 @@ function submissionElem(wordSubmission) {
         var scoreTag = $("<span></span>")
             .text(wordSubmission.isRealWord ? wordScore(wordSubmission.word) : "X")
             .attr("class", "tag tag-sm")
-            .addClass(wordSubmission.isRealWord ? "tag-success " : "tag-danger");
+            .addClass(wordSubmission.isRealWord ? "tag-success" : "tag-danger");
         elem.append(scoreTag);
     }
 
