@@ -1,58 +1,13 @@
 
 
-// EVENT HANDLERS
+// ----------------- MODEL -----------------
 
-$(document).ready(function() {
-    $("#word-attempt-form").submit(formSubmitted);
-    $("#textbox").on("input", textboxContentChanged);
-    $("#new-game-button").click(newGameButtonClicked);
-    render();
-});
-
-function formSubmitted(evt) {
-    evt.preventDefault();
-    var word = $("#textbox").val();
-    addNewWordSubmission(word);
-    render();
-}
-
-function newGameButtonClicked() {
-    startGame();
-    render();
-}
-
-function textboxContentChanged() {
-    model.currentAttempt = $("#textbox").val().toLowerCase();
-    render();
-}
-
-function receivedResponseFromPearson(response) {
-    // we received an answer from Pearson
-    console.log(response.results);
-
-    // if there are any results, the word is legitimate. Otherwise, it's not.
-    var isRealWord = response.results.length > 0;
-
-    // update the corresponding wordSubmission in the model
-    model.wordSubmissions.forEach(function(sub) {
-        if (sub.word === word) {
-            sub.isRealWord = isRealWord;
-        }
-    });
-
-    // re-render
-    render();
-}
-
-
-// MODEL
-
-var gameDuration = 60;
+var GAME_DURATION = 60;
 
 // all the stuff we need to keep track of
 var model = {
     gameHasStarted: false,
-    secondsRemaining: gameDuration,
+    secondsRemaining: GAME_DURATION,
     allowedLetters: [],
     wordSubmissions: [],
     currentAttempt: ""
@@ -64,7 +19,7 @@ var model = {
 function startGame() {
     endGame();
     model.gameHasStarted = true;
-    model.secondsRemaining = gameDuration;
+    model.secondsRemaining = GAME_DURATION;
     model.allowedLetters = generateAllowedLetters();
     model.wordSubmissions = [];
     model.currentAttempt = "";
@@ -78,6 +33,62 @@ function endGame() {
     stopTimer();
 }
 
+
+/**
+ * Given a word, adds a new wordSubmission to model.wordSubmissions.
+ *
+ * Refrains from adding a new entry if the model already contains
+ * a wordSubmission whose word is the same
+ */
+function addNewWordSubmission(word) {
+    // do we already have a wordSubmission with this word?
+    var alreadyUsed = model.wordSubmissions.filter(function(sub) {
+        return sub.word === word;
+    }).length > 0;
+
+    // if the word is valid and hasn't already been used, add it
+    if (containsOnlyAllowedLetters(word) && !alreadyUsed) {
+        model.wordSubmissions.push({ word: word });
+        // now we must also determine whether this is actually a real word
+        checkIfWordIsReal(word);
+    }
+
+    // clear the current attempt
+    model.currentAttempt = "";
+}
+
+/**
+ * Given a word, checks to see if that word actually exists in the dictionary.
+ *
+ * Subsequently updates the .isRealWord property of
+ * the corresponding wordSubmission in the model, and then re-renders.
+ */
+function checkIfWordIsReal(word) {
+    // make an AJAX call to the Peason API
+    $.ajax({
+        url: "http://api.pearson.com/v2/dictionaries/wordwise/entries?headword=" + word,
+        success: function(response) {
+            // we received an answer from Pearson
+            console.log(response.results);
+
+            // if there are any results, the word is legitimate. Otherwise, it's not.
+            var isRealWord = response.results.length > 0;
+
+            // update the corresponding wordSubmission in the model
+            model.wordSubmissions.forEach(function(sub) {
+                if (sub.word === word) {
+                    sub.isRealWord = isRealWord;
+                }
+            });
+
+            // re-render
+            render();
+        },
+        error: function(err) {
+            console.log(err);
+        }
+    });
+}
 
 /*
  * Makes the timer start ticking.
@@ -105,49 +116,35 @@ function stopTimer() {
     clearTimeout(model.timer);
 }
 
-/**
- * Given a word, adds a new wordSubmission to model.wordSubmissions.
- *
- * Refrains from adding a new entry if the model already contains
- * a wordSubmission whose word is the same
- */
-function addNewWordSubmission(word) {
-    // do we already have a wordSubmission with this word?
-    var alreadyUsed = model.wordSubmissions.filter(function(sub) {
-        return sub.word === word;
-    }).length > 0;
 
-    // if the word is valid and hasn't already been used, add it
-    if (containsOnlyAllowedLetters(word) && !alreadyUsed) {
-        model.wordSubmissions.push({ word: word });
+// ----------------- DOM EVENT HANDLERS -----------------
 
-        // now we must also determine whether this is actually a real word
-        checkIfWordIsReal(word);
-    }
-
-    // clear the current attempt
-    model.currentAttempt = "";
-}
-
-/**
- * Given a word, checks to see if that word actually exists in the dictionary.
- *
- * Subsequently updates the .isRealWord property of
- * the corresponding wordSubmission in the model, and then re-renders.
- */
-function checkIfWordIsReal(word) {
-    // make an AJAX call to the Peason API
-    $.ajax({
-        url: "http://api.pearson.com/v2/dictionaries/wordwise/entries?headword=" + word,
-        success: function(receivedResponseFromPearson),
-        error: function(err) {
-            console.log(err);
-        }
+$(document).ready(function() {
+    // when the new game button is clicked
+    $("#new-game-button").click(function() {
+        startGame();
+        render();
     });
-}
+
+    // when the textbox content changes
+    $("#textbox").on("input", function() {
+        model.currentAttempt = $("#textbox").val().toLowerCase();
+        render();
+    });
+
+    // when the form is submitted
+    $("#word-attempt-form").submit(function(evt) {
+        evt.preventDefault();
+        var word = $("#textbox").val();
+        addNewWordSubmission(word);
+        render();
+    });
+
+    render();
+});
 
 
-// VIEW
+// ----------------- VIEW -----------------
 
 /**
  * Updates everything on screen based on the current state of the model
@@ -217,7 +214,7 @@ function submissionElem(wordSubmission) {
         var scoreTag = $("<span></span>")
             .text(wordSubmission.isRealWord ? wordScore(wordSubmission.word) : "X")
             .attr("class", "tag tag-sm")
-            .addClass(wordSubmission.isRealWord ? "tag-success" : "tag-danger");
+            .addClass(wordSubmission.isRealWord ? "tag-success " : "tag-danger");
         elem.append(scoreTag);
     }
 
