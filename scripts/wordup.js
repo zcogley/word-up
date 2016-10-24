@@ -42,9 +42,7 @@ function endGame() {
  */
 function addNewWordSubmission(word) {
     // do we already have a wordSubmission with this word?
-    var alreadyUsed = model.wordSubmissions.filter(function(sub) {
-        return sub.word === word;
-    }).length > 0;
+    var alreadyUsed = false; // TODO
 
     // if the word is valid and hasn't already been used, add it
     if (containsOnlyAllowedLetters(word) && alreadyUsed == false) {
@@ -66,20 +64,16 @@ function addNewWordSubmission(word) {
 function checkIfWordIsReal(word) {
     // make an AJAX call to the Peason API
     $.ajax({
-        url: "http://api.pearson.com/v2/dictionaries/wordwise/entries?headword=" + word,
+        url: "" // TODO
         success: function(response) {
             // we received an answer from Pearson
             console.log(response);
 
             // if there are any results, the word is legitimate. Otherwise, it's not.
-            var isRealWord = response.results.length > 0;
+            var isRealWord = true; // TODO
 
             // update the corresponding wordSubmission in the model
-            model.wordSubmissions.forEach(function(submission) {
-                if (submission.word === word) {
-                    submission.isRealWord = isRealWord;
-                }
-            });
+            // TODO
 
             // re-render
             render();
@@ -126,17 +120,14 @@ $(document).ready(function() {
         render();
     });
 
-    // when the textbox content changes
-    $("#textbox").on("input", function() {
-        model.currentAttempt = $("#textbox").val().toLowerCase();
-        render();
-    });
+    // when the textbox content changes,
+    // update the .currentAttempt property of the model and re-render
+    // TODO
 
     // when the form is submitted
     $("#word-attempt-form").submit(function(evt) {
         evt.preventDefault();
-        var word = $("#textbox").val();
-        addNewWordSubmission(word);
+        addNewWordSubmission(model.currentAttempt);
         render();
     });
 
@@ -175,14 +166,10 @@ function render() {
     $("#allowed-letters").append(model.allowedLetters.map(letterElem));
 
     // render the word submissions
-    $("#word-submissions").append(model.wordSubmissions.map(submissionElem));
+    // TODO
 
     // render the textbox
-    $("#textbox")
-        .val(model.currentAttempt)
-        .focus()
-        .removeClass("bad-attempt")
-        .attr("disabled", false);
+    // TODO
 
     // if the current word attempt contains disallowed letters,
     // restyle the textbox and show the disallowed letters underneath
@@ -196,8 +183,7 @@ function render() {
     // if the game is over, disable the text box and clear its contents
     var gameOver = model.secondsRemaining <= 0
     if (gameOver) {
-        $("#textbox").prop("disabled", true);
-        $("#textbox").val("");
+        // TODO
     }
 }
 
@@ -206,20 +192,19 @@ function render() {
  * (one of the little chips below the text box)
  */
 function submissionElem(wordSubmission) {
-    var elem = $("<span></span>")
+    var wordSubmissionTag = $("<span></span>")
         .text(wordSubmission.word)
         .attr("class", "tag tag-lg word-submission");
 
     // if we know the status of this word (real word or not), then add a green score or red X
     if (wordSubmission.hasOwnProperty("isRealWord")) {
-        var scoreTag = $("<span></span>")
-            .text(wordSubmission.isRealWord ? wordScore(wordSubmission.word) : "X")
-            .attr("class", "tag tag-sm")
-            .addClass(wordSubmission.isRealWord ? "tag-success" : "tag-danger");
-        elem.append(scoreTag);
+        var scoreTag = $("<span></span>");
+        // TODO style the scoreTag and give it content
+
+        // TODO append the scoreTag to the wordSubmissionTag
     }
 
-    return elem;
+    return wordSubmissionTag;
 }
 
 /**
@@ -276,7 +261,8 @@ function isDisallowedLetter(letter) {
  * Note that the list might be empty, if it contains only allowed letters.
  */
 function disallowedLettersInWord(word) {
-    return word.split("").filter(isDisallowedLetter);
+    letters = word.split("");
+    return letters.filter(isDisallowedLetter);
 }
 
 /**
@@ -289,7 +275,7 @@ function containsOnlyAllowedLetters(word) {
 
 /**
  * Returns a list of 7 randomly chosen letters
- * All 7 letters will be distinct (no repeats of the same letter)
+ * Each letter will be distinct (no repeats of the same letter)
  */
 function generateAllowedLetters() {
     return chooseN(7, Object.keys(scrabblePointsForEachLetter));
@@ -309,10 +295,13 @@ function letterScore(letter) {
  * Returns a score of 0 if the word contains any disallowed letters.
  */
 function wordScore(word) {
-    if (containsOnlyAllowedLetters(word) == false) {
-        return 0;
-    }
-    return word.split("").map(letterScore).reduce(add, 0);
+    // TODO
+    // if the word contains any disallowed letters, then just return 0 right away
+
+
+    // split the word into letters and return the sum of the letters' scores
+    var letters = word.split("");
+    return letters.map(letterScore).reduce(add, 0);
 }
 
 
@@ -321,9 +310,14 @@ function wordScore(word) {
  * which is the sum of the scores of all the wordSubmissions whose word is a real dictionary word
  */
 function currentScore() {
-    return model.wordSubmissions.map(function(wordSubmission) {
-        return wordSubmission.isRealWord ? wordScore(wordSubmission.word) : 0;
-    }).reduce(add, 0);
+    // TODO
+    // replace the empty list below
+    // wordScores should be an array of scores, one for each wordSubmission in the model
+    // for each wordSubmission, if its word is not real, then the score should be 0
+    // if its word is a real word, then the score should just be the score of its word
+    var wordScores = [];
+
+    return wordScores.reduce(add, 0);
 }
 
 
@@ -335,7 +329,7 @@ function currentScore() {
  */
 function chooseN(n, items) {
     var selectedItems = [];
-    var total = Math.min(n, items.length)
+    var total = Math.min(n, items.length);
     for (var i = 0; i < total; i++) {
         index = Math.floor(Math.random() * items.length);
         selectedItems.push(items[index]);
