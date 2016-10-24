@@ -1,32 +1,55 @@
 
-// INITIALIZE STUFF
+
+// EVENT HANDLERS
 
 $(document).ready(function() {
-    $("#word-attempt-form").submit(function(evt) {
-        evt.preventDefault();
-        var word = $("#textbox").val();
-        addNewWordSubmission(word);
-        render();
-    });
-
-    $("#textbox").on("input", function() {
-        model.currentAttempt = $("#textbox").val().toLowerCase();
-        render();
-    });
-
-    $("#new-game-button").click(function(){
-        startGame();
-        render();
-    });
-
+    $("#word-attempt-form").submit(formSubmitted);
+    $("#textbox").on("input", textboxContentChanged);
+    $("#new-game-button").click(newGameButtonClicked);
     render();
 });
+
+function formSubmitted(evt) {
+    evt.preventDefault();
+    var word = $("#textbox").val();
+    addNewWordSubmission(word);
+    render();
+}
+
+function newGameButtonClicked() {
+    startGame();
+    render();
+}
+
+function textboxContentChanged() {
+    model.currentAttempt = $("#textbox").val().toLowerCase();
+    render();
+}
+
+function receivedResponseFromPearson(response) {
+    // we received an answer from Pearson
+    console.log(response.results);
+
+    // if there are any results, the word is legitimate. Otherwise, it's not.
+    var isRealWord = response.results.length > 0;
+
+    // update the corresponding wordSubmission in the model
+    model.wordSubmissions.forEach(function(sub) {
+        if (sub.word === word) {
+            sub.isRealWord = isRealWord;
+        }
+    });
+
+    // re-render
+    render();
+}
 
 
 // MODEL
 
 var gameDuration = 60;
 
+// all the stuff we need to keep track of
 var model = {
     gameHasStarted: false,
     secondsRemaining: gameDuration,
@@ -35,6 +58,9 @@ var model = {
     currentAttempt: ""
 }
 
+/*
+ * Resets the model to a starting state, and then starts the timer
+ */
 function startGame() {
     endGame();
     model.gameHasStarted = true;
@@ -45,10 +71,19 @@ function startGame() {
     model.timer = startTimer();
 }
 
+/*
+ * Wraps things up
+ */
 function endGame() {
     stopTimer();
 }
 
+
+/*
+ * Makes the timer start ticking.
+ * On each tick, updates the .secondsRemaining property of the model and re-renders.
+ * Stops when model.secondsRemaining reaches 0.
+ */
 function startTimer() {
     function tick() {
         return setTimeout(function() {
@@ -63,34 +98,48 @@ function startTimer() {
     return tick();
 }
 
+/*
+ * Makes the timer stop ticking.
+ */
 function stopTimer() {
     clearTimeout(model.timer);
 }
 
+/**
+ * Given a word, adds a new wordSubmission to model.wordSubmissions.
+ *
+ * Refrains from adding a new entry if the model already contains
+ * a wordSubmission whose word is the same
+ */
 function addNewWordSubmission(word) {
+    // do we already have a wordSubmission with this word?
     var alreadyUsed = model.wordSubmissions.filter(function(sub) {
         return sub.word === word;
     }).length > 0;
+
+    // if the word is valid and hasn't already been used, add it
     if (containsOnlyAllowedLetters(word) && !alreadyUsed) {
         model.wordSubmissions.push({ word: word });
-        checkWordExists(word);
+
+        // now we must also determine whether this is actually a real word
+        checkIfWordIsReal(word);
     }
+
+    // clear the current attempt
     model.currentAttempt = "";
 }
 
-function checkWordExists(word) {
+/**
+ * Given a word, checks to see if that word actually exists in the dictionary.
+ *
+ * Subsequently updates the .isRealWord property of
+ * the corresponding wordSubmission in the model, and then re-renders.
+ */
+function checkIfWordIsReal(word) {
+    // make an AJAX call to the Peason API
     $.ajax({
         url: "http://api.pearson.com/v2/dictionaries/wordwise/entries?headword=" + word,
-        success: function(response) {
-            console.log(response.results);
-            var isRealWord = response.results.length > 0;
-            model.wordSubmissions.forEach(function(sub) {
-                if (sub.word === word) {
-                    sub.isRealWord = isRealWord;
-                }
-            });
-            render();
-        },
+        success: function(receivedResponseFromPearson),
         error: function(err) {
             console.log(err);
         }
@@ -100,6 +149,9 @@ function checkWordExists(word) {
 
 // VIEW
 
+/**
+ * Updates everything on screen based on the current state of the model
+ */
 function render() {
 
     // clear stuff
@@ -125,7 +177,7 @@ function render() {
     $("#allowed-letters").append(model.allowedLetters.map(letterElem));
 
     // render the word submissions
-    $("#word-submissions").append(model.wordSubmissions.map(wordElem));
+    $("#word-submissions").append(model.wordSubmissions.map(submissionElem));
 
     // render the textbox
     $("#textbox")
@@ -151,10 +203,16 @@ function render() {
     }
 }
 
-function wordElem(wordSubmission) {
+/**
+ * Given a wordSubmission, returns a DOM element
+ * (one of the little chips below the text box)
+ */
+function submissionElem(wordSubmission) {
     var elem = $("<span></span>")
         .text(wordSubmission.word)
         .attr("class", "tag tag-lg word-submission");
+
+    // if we know the status of this word (real word or not), then add a green score or red X
     if (wordSubmission.hasOwnProperty("isRealWord")) {
         var scoreTag = $("<span></span>")
             .text(wordSubmission.isRealWord ? wordScore(wordSubmission.word) : "X")
@@ -162,19 +220,31 @@ function wordElem(wordSubmission) {
             .addClass(wordSubmission.isRealWord ? "tag-success" : "tag-danger");
         elem.append(scoreTag);
     }
+
     return elem;
 }
 
+/**
+ * Given a letter, returns a DOM element
+ * (one of the little chips above the text box)
+ */
 function letterElem(letter) {
+    // a tag (little chip) to display the letter
+    var letterTag = $("<span></span>")
+        .text(letter)
+        .attr("class", "tag tag-lg allowed-letter")
+
+    // a smaller tag to indicate how many points this letter is worth
     var scoreTag = $("<span></span>")
         .text(letterScore(letter))
         .attr("class", "tag tag-default tag-sm");
-    return $("<span></span>")
-        .text(letter)
-        .attr("class", "tag tag-lg allowed-letter")
-        .append(scoreTag);
+
+    return letterTag.append(scoreTag);
 }
 
+/**
+ * Given a disallowed letter, returns a little red chip to display the letter
+ */
 function disallowedLetterElem(letter) {
     return $("<span></span>").text(letter).addClass("tag tag-sm tag-danger");
 }
@@ -183,31 +253,63 @@ function disallowedLetterElem(letter) {
 
 // GAME LOGIC
 
+// borrowing Scrabble's point system
 var scrabblePointsForEachLetter = {
     a: 1, b: 3, c: 3, d: 2, e: 1, f: 4, g: 2, h: 4, i: 1, j: 8, k: 5, l: 1, m: 3,
     n: 1, o: 1, p: 3, q: 10, r: 1, s: 1, t: 1, u: 1, v: 4, w: 4, x: 8, y: 4, z: 10
 }
 
+/**
+ * Given a letter, checks whether that letter is one of the allowed letters from the current model
+ */
 function isAllowedLetter(letter) {
     return model.allowedLetters.indexOf(letter) !== -1
 }
 
+/**
+ * The negation of isAllowedLetter (see above)
+ */
 function isDisallowedLetter(letter) {
     return isAllowedLetter(letter) == false;
 }
 
-function containsOnlyAllowedLetters(word) {
-    return disallowedLettersInWord(word).length == 0;
-}
-
+/**
+ * Given a word, returns a list of all the disallowed letters in that word
+ * Note that the list might be empty, if it contains only allowed letters.
+ */
 function disallowedLettersInWord(word) {
     return word.split("").filter(isDisallowedLetter);
 }
 
+/**
+ * Given a word, returns true if the word is "clean",
+ * i.e. the word does not contain any disallowed letters
+ */
+function containsOnlyAllowedLetters(word) {
+    return disallowedLettersInWord(word).length == 0;
+}
+
+/**
+ * Returns a list of 7 randomly chosen letters
+ * All 7 letters will be distinct (no repeats of the same letter)
+ */
 function generateAllowedLetters() {
     return chooseN(7, Object.keys(scrabblePointsForEachLetter));
 }
 
+/**
+ * Given a letter, returns the score of that letter (case-insensitive)
+ */
+function letterScore(letter) {
+    return scrabblePointsForEachLetter[letter.toLowerCase()];
+}
+
+/**
+ * Given a word, returns its total score,
+ * which is computed by summing the scores of each of its letters.
+ *
+ * Returns a score of 0 if the word contains any disallowed letters.
+ */
 function wordScore(word) {
     if (containsOnlyAllowedLetters(word) == false) {
         return 0;
@@ -215,10 +317,11 @@ function wordScore(word) {
     return word.split("").map(letterScore).reduce(add, 0);
 }
 
-function letterScore(letter) {
-    return scrabblePointsForEachLetter[letter.toLowerCase()];
-}
 
+/**
+ * Returns the user's current total score,
+ * which is the sum of the scores of all the wordSubmissions whose word is a real dictionary word
+ */
 function currentScore() {
     return model.wordSubmissions.map(function(wordSubmission) {
         return wordSubmission.isRealWord ? wordScore(wordSubmission.word) : 0;
