@@ -4,33 +4,24 @@ body {
     font-size: 20px;
 }
 
-input {
-    text-align: center;
-    padding: 1%;
-    font-size: 30px;
-    color: grey;
-}
-
-input:focus {
-    border: 2px solid #4285F4;
-}
-
 form {
     margin-bottom: 2%;
 }
 
+.jumbotron {
+    padding: 2%;
+}
+
+#pregame {
+    margin-bottom: 4%;
+}
+
+main {
+    padding: 2%;
+}
+
 .bad-attempt {
     color: #d9534f;
-}
-
-.allowed-letter {
-    font-size: 40px;
-    color: orange;
-}
-
-.huge-text {
-    font-size: 60px;
-    color: orange;
 }
 
 .tag-sm {
@@ -39,7 +30,7 @@ form {
 }
 
 .tag-lg {
-    background: white;
+    background: rgba(0,0,0,0);
     margin-right: 2%;
     margin-bottom: 2%;
     box-shadow: 1px 2px 2px 1px rgba(0,0,0,0.1)
@@ -50,11 +41,22 @@ form {
     color: orange;
 }
 
-
-#pregame {
-    margin-bottom: 4%;
+.allowed-letter {
+    font-size: 40px;
+    color: orange;
 }
 
-main {
-    padding: 2%;
+.huge-text {
+    font-size: 60px;
+}
+
+input {
+    text-align: center;
+    padding: 1%;
+    font-size: 30px;
+    color: grey;
+}
+
+input:focus {
+    border: 2px solid #4285F4;
 }
