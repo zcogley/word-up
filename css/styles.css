@@ -39,6 +39,7 @@ main {
 .word-submission {
     font-size: 30px;
     color: orange;
+    font-weight: normal;
 }
 
 .allowed-letter {
