@@ -6,11 +6,20 @@ var GAME_DURATION = 60;
 
 // all the stuff we need to keep track of
 var model = {
+    // a boolean indicating whether the (first) game has started yet
     gameHasStarted: false,
+
+    // how much time is left in the current game
     secondsRemaining: GAME_DURATION,
+
+    // a list of the 7 letters that the player is allowed to use
     allowedLetters: [],
-    wordSubmissions: [],
-    currentAttempt: ""
+
+    // the word that the user is currently typing
+    currentAttempt: "",
+
+    // a list of the words the user has previously submitted in the current game
+    wordSubmissions: []
 }
 
 /*
@@ -47,12 +56,9 @@ function addNewWordSubmission(word) {
     // if the word is valid and hasn't already been used, add it
     if (containsOnlyAllowedLetters(word) && alreadyUsed == false) {
         model.wordSubmissions.push({ word: word });
-        // now we must also determine whether this is actually a real word
+        // and now we must also determine whether this is actually a real word
         checkIfWordIsReal(word);
     }
-
-    // clear the current attempt
-    model.currentAttempt = "";
 }
 
 /**
@@ -62,18 +68,26 @@ function addNewWordSubmission(word) {
  * the corresponding wordSubmission in the model, and then re-renders.
  */
 function checkIfWordIsReal(word) {
-    // make an AJAX call to the Peason API
+
+    // make an AJAX call to the Pearson API
     $.ajax({
-        url: "", // TODO
+        url: "", // TODO what should the url be?
         success: function(response) {
-            // we received an answer from Pearson
+            // we received an answer from Pearson.
+
+            // let's print the response to the console so we can take a looksie
             console.log(response);
 
-            // if there are any results, the word is legitimate. Otherwise, it's not.
-            var isRealWord = true; // TODO
-
-            // update the corresponding wordSubmission in the model
             // TODO
+            // Replace the 'true' below.
+            // If the response contains any results, then the word is legitimate.
+            // Otherwise, it is not.
+            var isRealWord = true;
+
+
+            // TODO
+            // Update the corresponding wordSubmission in the model
+
 
             // re-render
             render();
@@ -84,50 +98,32 @@ function checkIfWordIsReal(word) {
     });
 }
 
-/*
- * Makes the timer start ticking.
- * On each tick, updates the .secondsRemaining property of the model and re-renders.
- * Stops when model.secondsRemaining reaches 0.
- */
-function startTimer() {
-    function tick() {
-        return setTimeout(function() {
-            model.secondsRemaining = Math.max(0, model.secondsRemaining - 1);
-            render();
-            var stillTimeLeft = model.gameHasStarted && model.secondsRemaining > 0
-            if (stillTimeLeft) {
-                model.timer = tick();
-            }
-        }, 1000);
-    }
-    return tick();
-}
-
-/*
- * Makes the timer stop ticking.
- */
-function stopTimer() {
-    clearTimeout(model.timer);
-}
-
 
 // ----------------- DOM EVENT HANDLERS -----------------
 
 $(document).ready(function() {
     // when the new game button is clicked
     $("#new-game-button").click(function() {
+        // start the game and re-render
         startGame();
         render();
     });
 
-    // when the textbox content changes,
-    // update the .currentAttempt property of the model and re-render
     // TODO
+    // Add another event handler with a callback function.
+    // When the textbox content changes,
+    // update the .currentAttempt property of the model and re-render
+
 
     // when the form is submitted
     $("#word-attempt-form").submit(function(evt) {
+        // we don't want the page to refresh
         evt.preventDefault();
+        // add a new word from whatever they typed
         addNewWordSubmission(model.currentAttempt);
+        // clear away whatever they typed
+        model.currentAttempt = "";
+        // re-render
         render();
     });
 
@@ -145,8 +141,8 @@ function render() {
 
     // clear stuff
     $("#textbox").val("");
-    $("#word-submissions").empty();
     $("#allowed-letters").empty();
+    $("#word-submissions").empty();
     $("#disallowed-letters").empty();
 
     // update the scoreboard
@@ -165,25 +161,28 @@ function render() {
     // render the letter tiles
     $("#allowed-letters").append(model.allowedLetters.map(letterElem));
 
+    // TODO
     // render the word submissions
-    // TODO
 
-    // render the textbox
     // TODO
+    // render the textbox
 
     // if the current word attempt contains disallowed letters,
-    // restyle the textbox and show the disallowed letters underneath
     var disallowedLetters = disallowedLettersInWord(model.currentAttempt);
     if (disallowedLetters.length > 0) {
+        // restyle the textbox
         $("#textbox").addClass("bad-attempt");
-        $("#disallowed-letters")
-            .append(disallowedLetters.map(disallowedLetterElem));
+
+        // show the disallowed letters underneath
+        var redLetterChips = disallowedLetters.map(disallowedLetterElem)
+        $("#disallowed-letters").append(redLetterChips);
     }
 
-    // if the game is over, disable the text box and clear its contents
+    // if the game is over
     var gameOver = model.secondsRemaining <= 0
     if (gameOver) {
         // TODO
+        // disable the text box and clear its contents
     }
 }
 
@@ -218,9 +217,11 @@ function submissionElem(wordSubmission) {
     // if we know the status of this word (real word or not), then add a green score or red X
     if (wordSubmission.hasOwnProperty("isRealWord")) {
         var scoreTag = $("<span></span>");
-        // TODO style the scoreTag and give it content
+        // TODO
+        // style the scoreTag and give it content
 
-        // TODO append the scoreTag to the wordSubmissionTag
+        // TODO
+        // append the scoreTag to the wordSubmissionTag
     }
 
     return wordSubmissionTag;
@@ -272,6 +273,7 @@ function disallowedLettersInWord(word) {
  */
 function containsOnlyAllowedLetters(word) {
     // TODO
+    // return the answer
 }
 
 /**
@@ -344,4 +346,36 @@ function chooseN(n, items) {
  */
 function add(a, b) {
     return a + b;
+}
+
+
+// ----------------- THE TIMER -----------------
+
+// don't waste your brain power trying to understand how these functions work.
+// just use them
+
+/*
+ * Makes the timer start ticking.
+ * On each tick, updates the .secondsRemaining property of the model and re-renders.
+ * Stops when model.secondsRemaining reaches 0.
+ */
+function startTimer() {
+    function tick() {
+        return setTimeout(function() {
+            model.secondsRemaining = Math.max(0, model.secondsRemaining - 1);
+            render();
+            var stillTimeLeft = model.gameHasStarted && model.secondsRemaining > 0
+            if (stillTimeLeft) {
+                model.timer = tick();
+            }
+        }, 1000);
+    }
+    return tick();
+}
+
+/*
+ * Makes the timer stop ticking.
+ */
+function stopTimer() {
+    clearTimeout(model.timer);
 }

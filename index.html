@@ -9,10 +9,10 @@
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-2.2.3.js"></script>
 
-    <!-- Bootstrap -->
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css" integrity="sha384-2hfp1SzUoho7/TsGGGDaFdsuuDL0LX2hnUp6VkX3CUQ2K4K+xjboZdsXyp4oUHZj" crossorigin="anonymous">
 
-    <!-- our stylesheet -->
+    <!-- our CSS -->
     <link rel="stylesheet" href="css/styles.css"/>
 
 </head>
@@ -22,19 +22,22 @@
 
     <main>
 
-        <!-- a section for things that should always be showing,
+        <!--
+        a section for things that should always be showing,
         even if the game has not yet started -->
         <section id="pregame">
 
-            <!-- A "scoreboard" to display the user's current score and the time remaining -->
+            <!--
+            A "scoreboard" to display the user's current score
+            and the time remaining -->
             <div id="scoreboard" class="row">
                 <div class="col-xs-6">
                     <h6>Time Remaining</h6>
-                    <h1 class="huge-text" id="time-remaining"></h1>
+                    <h1 class="scoreboard-data" id="time-remaining"></h1>
                 </div>
                 <div class="col-xs-6">
                     <h6>Score</h6>
-                    <h1 class="huge-text" id="current-score"></h1>
+                    <h1 class="scoreboard-data" id="current-score"></h1>
                 </div>
             </div>
 
@@ -43,9 +46,9 @@
             -->
         </section>
 
-        <!-- things that should only be showing once the game has started -->
+        <!-- things that should not show up until the (first) game has started -->
         <section id="game">
-            
+
             <!-- TODO
             Add some instructions so the user knows what to do.
             -->
@@ -61,8 +64,9 @@
                 <!-- the actual text box where the user types -->
                 <input type="text" id="textbox"/>
 
-                <!-- a container to display helpful red chips for each of the
-                     disallowed letters in the user's current word attempt -->
+                <!--
+                a container to display helpful red chips for each of the
+                disallowed letters in the user's current word attempt -->
                 <div id="disallowed-letters"></div>
             </form>
 

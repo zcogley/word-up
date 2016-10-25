@@ -4,11 +4,11 @@ body {
     font-size: 20px;
 }
 
-form {
-    margin-bottom: 2%;
+.jumbotron {
+    padding: 2%;
 }
 
-.jumbotron {
+main {
     padding: 2%;
 }
 
@@ -16,12 +16,12 @@ form {
     margin-bottom: 4%;
 }
 
-main {
-    padding: 2%;
+#word-attempt-form {
+    margin-bottom: 2%;
 }
 
 .bad-attempt {
-    color: #d9534f;
+    color: #d9534f; /* Bootstrap "danger" red */
 }
 
 /* A chip to display a letter or a wordSubmission */
@@ -49,7 +49,7 @@ main {
     color: orange;
 }
 
-.huge-text {
+.scoreboard-data {
     font-size: 60px;
 }
 
@@ -61,5 +61,5 @@ input {
 }
 
 input:focus {
-    border: 2px solid #4285F4;
+    border: 2px solid #4285F4; /* Bootstrap "primary" blue */
 }
