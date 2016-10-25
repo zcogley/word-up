@@ -24,21 +24,24 @@ main {
     color: #d9534f;
 }
 
+/* A chip to display a letter or a wordSubmission */
+.tag-lg {
+    background: rgba(0,0,0,0);
+    margin-right: 2%;
+    margin-bottom: 2%;
+    box-shadow: 1px 2px 2px 1px rgba(0,0,0,0.1);
+}
+
+/* A smaller chip to display the score of a letter or word */
 .tag-sm {
     font-size: 14px;
     margin-left: 8px;
 }
 
-.tag-lg {
-    background: rgba(0,0,0,0);
-    margin-right: 2%;
-    margin-bottom: 2%;
-    box-shadow: 1px 2px 2px 1px rgba(0,0,0,0.1)
-}
-
 .word-submission {
     font-size: 30px;
     color: orange;
+    font-weight: normal;
 }
 
 .allowed-letter {

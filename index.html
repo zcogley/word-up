@@ -21,7 +21,12 @@
     <h1 class="jumbotron">Word Up!</h1>
 
     <main>
+
+        <!-- a section for things that should always be showing,
+        even if the game has not yet started -->
         <section id="pregame">
+
+            <!-- A "scoreboard" to display the user's current score and the time remaining -->
             <div id="scoreboard" class="row">
                 <div class="col-xs-6">
                     <h6>Time Remaining</h6>
@@ -32,17 +37,36 @@
                     <h1 class="huge-text" id="current-score"></h1>
                 </div>
             </div>
-            <button id="new-game-button" class="btn btn-primary">New Game</button>
+
+            <!-- TODO
+            Make a "New Game" button
+            -->
         </section>
 
+        <!-- things that should only be showing once the game has started -->
         <section id="game">
-            <p>Spell as many words as you can, using only these letters:</p>
-            <div id="allowed-letters"></div>
+            
+            <!-- TODO
+            Add some instructions so the user knows what to do.
+            -->
 
+            <!-- TODO
+            Make an empty container to hold the letter chips.
+            Give it an id of "allowed-letters".
+            -->
+
+            <!-- the form via which the user attempts to submit new words -->
             <form id="word-attempt-form">
+
+                <!-- the actual text box where the user types -->
                 <input type="text" id="textbox"/>
+
+                <!-- a container to display helpful red chips for each of the
+                     disallowed letters in the user's current word attempt -->
                 <div id="disallowed-letters"></div>
             </form>
+
+            <!-- a container to display the user's word submissions -->
             <div id="word-submissions"></div>
         </section>
     </main>

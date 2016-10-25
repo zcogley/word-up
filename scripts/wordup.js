@@ -64,7 +64,7 @@ function addNewWordSubmission(word) {
 function checkIfWordIsReal(word) {
     // make an AJAX call to the Peason API
     $.ajax({
-        url: "" // TODO
+        url: "", // TODO
         success: function(response) {
             // we received an answer from Pearson
             console.log(response);
@@ -187,6 +187,25 @@ function render() {
     }
 }
 
+
+/**
+ * Given a letter, returns a DOM element
+ * (one of the little chips above the text box)
+ */
+function letterElem(letter) {
+    // a tag (little chip) to display the letter
+    var letterTag = $("<span></span>")
+        .text(letter)
+        .attr("class", "tag tag-lg allowed-letter")
+
+    // a smaller tag to indicate how many points this letter is worth
+    var scoreTag = $("<span></span>")
+        .text(letterScore(letter))
+        .attr("class", "tag tag-default tag-sm");
+
+    return letterTag.append(scoreTag);
+}
+
 /**
  * Given a wordSubmission, returns a DOM element
  * (one of the little chips below the text box)
@@ -205,24 +224,6 @@ function submissionElem(wordSubmission) {
     }
 
     return wordSubmissionTag;
-}
-
-/**
- * Given a letter, returns a DOM element
- * (one of the little chips above the text box)
- */
-function letterElem(letter) {
-    // a tag (little chip) to display the letter
-    var letterTag = $("<span></span>")
-        .text(letter)
-        .attr("class", "tag tag-lg allowed-letter")
-
-    // a smaller tag to indicate how many points this letter is worth
-    var scoreTag = $("<span></span>")
-        .text(letterScore(letter))
-        .attr("class", "tag tag-default tag-sm");
-
-    return letterTag.append(scoreTag);
 }
 
 /**
@@ -270,7 +271,7 @@ function disallowedLettersInWord(word) {
  * i.e. the word does not contain any disallowed letters
  */
 function containsOnlyAllowedLetters(word) {
-    return disallowedLettersInWord(word).length == 0;
+    // TODO
 }
 
 /**
@@ -313,7 +314,7 @@ function currentScore() {
     // TODO
     // replace the empty list below
     // wordScores should be an array of scores, one for each wordSubmission in the model
-    // for each wordSubmission, if its word is not real, then the score should be 0
+    // for a given wordSubmission, if its word is not real, then the score should be 0
     // if its word is a real word, then the score should just be the score of its word
     var wordScores = [];
 
