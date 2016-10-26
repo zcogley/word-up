@@ -109,14 +109,21 @@ $(document).ready(function() {
         render();
     });
 
-    // TODO
+    // TODO 5
     // Add another event handler with a callback function.
     // When the textbox content changes,
     // update the .currentAttempt property of the model and re-render
-
+    $("#textbox").on("input", function() {
+        console.log($("#textbox").val());
+        model.currentAttempt = $("#textbox").val();
+        render();
+    });
 
     // when the form is submitted
     $("#word-attempt-form").submit(function(evt) {
+
+        console.log("submitted!");
+
         // we don't want the page to refresh
         evt.preventDefault();
         // add a new word from whatever they typed
@@ -145,8 +152,11 @@ function render() {
     $("#word-submissions").empty();
     $("#disallowed-letters").empty();
 
-    // update the scoreboard
+    // update the score on the scoreboard
     $("#current-score").text(currentScore());
+
+    // TODO 2
+    // update the curent time remaining on the scoreboard
     $("#time-remaining").text(model.secondsRemaining);
 
     // if the game has not started yet, just hide the #game container and exit
