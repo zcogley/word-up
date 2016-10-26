@@ -147,9 +147,10 @@ $(document).ready(function() {
 function render() {
 
     // clear stuff
-    $("#textbox").val("");
     $("#allowed-letters").empty();
     $("#word-submissions").empty();
+    $("#textbox").val("");
+    $("#textbox").removeClass("bad-attempt");
     $("#disallowed-letters").empty();
 
     // update the score on the scoreboard
@@ -174,12 +175,17 @@ function render() {
     // TODO
     // render the word submissions
 
-    // TODO
+
+    // TODO 6
     // render the textbox
+    $("#textbox").val(model.currentAttempt);
+
 
     // if the current word attempt contains disallowed letters,
     var disallowedLetters = disallowedLettersInWord(model.currentAttempt);
     if (disallowedLetters.length > 0) {
+        console.log(disallowedLetters);
+
         // restyle the textbox
         $("#textbox").addClass("bad-attempt");
 
