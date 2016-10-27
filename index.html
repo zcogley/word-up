@@ -9,10 +9,10 @@
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-2.2.3.js"></script>
 
-    <!-- Bootstrap -->
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css" integrity="sha384-2hfp1SzUoho7/TsGGGDaFdsuuDL0LX2hnUp6VkX3CUQ2K4K+xjboZdsXyp4oUHZj" crossorigin="anonymous">
 
-    <!-- our stylesheet -->
+    <!-- our CSS -->
     <link rel="stylesheet" href="css/styles.css"/>
 
 </head>
@@ -21,29 +21,56 @@
     <h1 class="jumbotron">Word Up!</h1>
 
     <main>
+
+        <!--
+        a section for things that should always be showing,
+        even if the game has not yet started -->
         <section id="pregame">
+
+            <!--
+            A "scoreboard" to display the user's current score
+            and the time remaining -->
             <div id="scoreboard" class="row">
                 <div class="col-xs-6">
                     <h6>Time Remaining</h6>
-                    <h1 class="huge-text" id="time-remaining"></h1>
+                    <h1 class="scoreboard-data" id="time-remaining"></h1>
                 </div>
                 <div class="col-xs-6">
                     <h6>Score</h6>
-                    <h1 class="huge-text" id="current-score"></h1>
+                    <h1 class="scoreboard-data" id="current-score"></h1>
                 </div>
             </div>
-            <button id="new-game-button" class="btn btn-primary">New Game</button>
+
+            <!-- TODO 1
+            Make a "New Game" button
+            -->
         </section>
 
+        <!-- things that should not show up until the (first) game has started -->
         <section id="game">
-            <p>Spell as many words as you can, using only these letters:</p>
-            <div id="allowed-letters"></div>
 
+            <!-- TODO 4
+            Add some instructions so the user knows what to do.
+            -->
+
+            <!-- TODO 5
+            Make an empty container to hold the letter chips.
+            Give it an id of "allowed-letters".
+            -->
+
+            <!-- the form via which the user attempts to submit new words -->
             <form id="word-attempt-form">
+                <!-- the actual text box where the user types -->
                 <input type="text" id="textbox"/>
-                <div id="disallowed-letters"></div>
+
+                <br>
+                <!-- red feedback chips will be injected here -->
             </form>
-            <div id="word-submissions"></div>
+
+            <!-- a container to display the user's word submissions -->
+            <div id="word-submissions">
+                <!-- word submission chips will be injected here -->
+            </div>
         </section>
     </main>
 
