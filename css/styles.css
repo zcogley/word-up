@@ -6,6 +6,8 @@ body {
 
 .jumbotron {
     padding: 2%;
+    background: orange;
+    color: #fff;
 }
 
 main {
@@ -13,11 +15,12 @@ main {
 }
 
 #pregame {
-    margin-bottom: 4%;
+    margin-bottom: 8%;
 }
 
 #word-attempt-form {
-    margin-bottom: 2%;
+    margin-top: 2%;
+    margin-bottom: 3%;
 }
 
 .bad-attempt {
@@ -26,7 +29,6 @@ main {
 
 /* A chip to display a letter or a wordSubmission */
 .tag-lg {
-    background: rgba(0,0,0,0);
     margin-right: 2%;
     margin-bottom: 2%;
     box-shadow: 1px 2px 2px 1px rgba(0,0,0,0.1);
@@ -35,7 +37,7 @@ main {
 /* A smaller chip to display the score of a letter or word */
 .tag-sm {
     font-size: 14px;
-    margin-left: 8px;
+    margin-left: 0.4em;
 }
 
 .word-submission {
@@ -62,4 +64,5 @@ input {
 
 input:focus {
     border: 2px solid #4285F4; /* Bootstrap "primary" blue */
+    outline-color: #4285f4; /* outline is the fuzzy "glow" */
 }

@@ -53,7 +53,7 @@
             <!-- TODO 3
             Add some instructions so the user knows what to do.
             -->
-            <p>Type as many words as you can, using only these letters:</p>
+            <p>Spell as many words as you can, using only these letters:</p>
 
             <!-- TODO 4
             Make an empty container to hold the letter chips.
@@ -63,18 +63,17 @@
 
             <!-- the form via which the user attempts to submit new words -->
             <form id="word-attempt-form">
-
                 <!-- the actual text box where the user types -->
                 <input type="text" id="textbox"/>
 
-                <!--
-                a container to display helpful red chips for each of the
-                disallowed letters in the user's current word attempt -->
-                <div id="disallowed-letters"></div>
+                <br>
+                <!-- red feedback chips will be injected here -->
             </form>
 
             <!-- a container to display the user's word submissions -->
-            <div id="word-submissions"></div>
+            <div id="word-submissions">
+                <!-- word submission chips will be injected here -->
+            </div>
         </section>
     </main>
 
