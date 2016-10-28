@@ -101,42 +101,6 @@ function checkIfWordIsReal(word) {
 }
 
 
-// ----------------- DOM EVENT HANDLERS -----------------
-
-$(document).ready(function() {
-    // when the new game button is clicked
-    $("#new-game-button").click(function() {
-        // start the game and re-render
-        startGame();
-        render();
-    });
-
-    // TODO 6
-    // Add another event handler with a callback function.
-    // When the textbox content changes,
-    // update the .currentAttempt property of the model and re-render
-
-
-    // when the form is submitted
-    $("#word-attempt-form").submit(function(evt) {
-        // we don't want the page to refresh
-        evt.preventDefault();
-
-        // add a new word from whatever they typed
-        addNewWordSubmission(model.currentAttempt);
-
-        // clear away whatever they typed
-        model.currentAttempt = "";
-
-        // re-render
-        render();
-    });
-
-    // initial render
-    render();
-});
-
-
 // ----------------- VIEW -----------------
 
 /**
@@ -263,6 +227,41 @@ function disallowedLetterChip(letter) {
         .addClass("tag tag-sm tag-danger disallowed-letter");
 }
 
+
+// ----------------- DOM EVENT HANDLERS -----------------
+
+$(document).ready(function() {
+    // when the new game button is clicked
+    $("#new-game-button").click(function() {
+        // start the game and re-render
+        startGame();
+        render();
+    });
+
+    // TODO 6
+    // Add another event handler with a callback function.
+    // When the textbox content changes,
+    // update the .currentAttempt property of the model and re-render
+
+
+    // when the form is submitted
+    $("#word-attempt-form").submit(function(evt) {
+        // we don't want the page to refresh
+        evt.preventDefault();
+
+        // add a new word from whatever they typed
+        addNewWordSubmission(model.currentAttempt);
+
+        // clear away whatever they typed
+        model.currentAttempt = "";
+
+        // re-render
+        render();
+    });
+
+    // initial render
+    render();
+});
 
 
 // ----------------- GAME LOGIC -----------------
