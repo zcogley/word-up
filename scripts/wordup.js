@@ -141,7 +141,6 @@ function render() {
     // TODO 11
     // Render the word submissions
 
-
     // Set the value of the textbox
     $("#textbox").val(model.currentAttempt);
 
@@ -238,10 +237,13 @@ $(document).ready(function() {
         render();
     });
 
-    // TODO 6
-    // Add another event handler with a callback function.
+    // event handler with a callback function.
     // When the textbox content changes,
-    // update the .currentAttempt property of the model and re-render
+    // updates the .currentAttempt property of the model and re-renders
+    $("#textbox").on("input", function() {
+        model.currentAttempt = $("#textbox").val();
+        render();
+    });
 
 
     // when the form is submitted
