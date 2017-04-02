@@ -159,6 +159,7 @@ function render() {
 
         // TODO 8
         // append the red letter chips to the form
+        $("#word-attempt-form").append(redLetterChips);
 
     }
 
@@ -279,8 +280,7 @@ var scrabblePointsForEachLetter = {
  * meaning it is not a member of the .allowedLetters list from the current model
  */
 function isDisallowedLetter(letter) {
-    // TODO 7
-    // This should return true if the letter is not an element of
+    // returns true if the letter is not an element of
     // the .allowedLetters list in the model
     letter = model.currentAttempt;
     var index = model.allowedLetters.indexOf(letter);
