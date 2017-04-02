@@ -282,7 +282,14 @@ function isDisallowedLetter(letter) {
     // TODO 7
     // This should return true if the letter is not an element of
     // the .allowedLetters list in the model
-    return false;
+    letter = model.currentAttempt;
+    var index = model.allowedLetters.indexOf(letter);
+    if (index == -1) {
+      return true;
+    }
+    else {
+      return false;
+    }
 }
 
 /**
