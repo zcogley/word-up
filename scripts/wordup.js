@@ -157,8 +157,7 @@ function render() {
         // show the disallowed letters underneath
         var redLetterChips = disallowedLetters.map(disallowedLetterChip);
 
-        // TODO 8
-        // append the red letter chips to the form
+        // appends the red letter chips to the form
         $("#word-attempt-form").append(redLetterChips);
 
     }
@@ -166,9 +165,9 @@ function render() {
     // if the game is over
     var gameOver = model.secondsRemaining <= 0
     if (gameOver) {
-        // TODO 9
-        // disable the text box and clear its contents
-
+        // disables the text box and clear its contents
+        $("#textbox").attr("disabled", true);
+        $("#textbox").val("");
     }
 }
 
