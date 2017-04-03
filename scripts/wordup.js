@@ -131,10 +131,6 @@ function render() {
     $(".tag").remove();
     $("#textbox").attr("disabled", false);
 
-    // TODO 10
-    // Add a few things to the above code block (underneath "// clear stuff").
-
-
     // reveal the #game container
     $("#game").show();
 
@@ -144,6 +140,8 @@ function render() {
 
     // TODO 11
     // Render the word submissions
+    var words = model.wordSubmissions.map(wordSubmissionChip);
+    $("#word-submissions").append(words);
 
     // Set the value of the textbox
     $("#textbox").val(model.currentAttempt);
