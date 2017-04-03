@@ -127,6 +127,10 @@ function render() {
     // clear stuff
     $("#allowed-letters").empty();
     $("#word-submissions").empty();
+    $("#textbox").removeClass("bad-attempt");
+    $(".tag").remove();
+    $("#textbox").attr("disabled", false);
+
     // TODO 10
     // Add a few things to the above code block (underneath "// clear stuff").
 
@@ -165,7 +169,7 @@ function render() {
     // if the game is over
     var gameOver = model.secondsRemaining <= 0
     if (gameOver) {
-        // disables the text box and clear its contents
+        // disable the text box and clear its contents
         $("#textbox").attr("disabled", true);
         $("#textbox").val("");
     }
