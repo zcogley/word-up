@@ -138,8 +138,7 @@ function render() {
     var letterChips = model.allowedLetters.map(letterChip)
     $("#allowed-letters").append(letterChips);
 
-    // TODO 11
-    // Render the word submissions
+    // Renders the word submissions
     var words = model.wordSubmissions.map(wordSubmissionChip);
     $("#word-submissions").append(words);
 
@@ -306,10 +305,8 @@ function disallowedLettersInWord(word) {
  * i.e. the word does not contain any disallowed letters
  */
 function containsOnlyAllowedLetters(word) {
-    // TODO 12
-    // Return the actual answer.
-
-    return true;
+    // Returns true if the word only contains allowed letters; false otherwise
+    return disallowedLettersInWord(word).length == 0;
 }
 
 /**
