@@ -283,7 +283,6 @@ var scrabblePointsForEachLetter = {
 function isDisallowedLetter(letter) {
     // returns true if the letter is not an element of
     // the .allowedLetters list in the model
-    letter = model.currentAttempt;
     var index = model.allowedLetters.indexOf(letter);
     if (index == -1) {
       return true;
@@ -309,7 +308,7 @@ function disallowedLettersInWord(word) {
 function containsOnlyAllowedLetters(word) {
     // TODO 12
     // Return the actual answer.
-  
+
     return true;
 }
 
