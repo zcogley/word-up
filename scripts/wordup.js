@@ -81,9 +81,12 @@ function checkIfWordIsReal(word) {
             // results; false otherwise
             var theAnswer = response.results != 0;
 
-            // TODO 15
-            // Update the corresponding wordSubmission in the model
-
+            // Updates the corresponding wordSubmission in the model as Real or Not
+            model.wordSubmissions.forEach(function(item){
+              if (item.word == word) {
+                model.wordSubmissions.push ({isRealWord: theAnswer});
+              }
+            });
 
             // re-render
             render();
