@@ -359,8 +359,6 @@ function wordScore(word) {
     // split the word into a list of letters
   const letters = word.split('');
 
-    // TODO 19
-    // Replace the empty list below.
     // Map the list of letters into a list of scores, one for each letter.
   const letterScores = letters.map(letterScore);
 
@@ -382,9 +380,8 @@ function currentScore() {
     return 0;
   });
 
-    // TODO 20
-    // return the total sum of the word scores
-  return 0;
+    // returns the total sum of the word scores
+  return wordScores.reduce(add, 0);
 }
 
 
