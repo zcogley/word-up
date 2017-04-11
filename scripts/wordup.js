@@ -84,7 +84,7 @@ function checkIfWordIsReal(word) {
             // Updates the corresponding wordSubmission in the model as Real or Not
             model.wordSubmissions.forEach(function(item){
               if (item.word == word) {
-                model.wordSubmissions.push ({isRealWord: theAnswer});
+                item.isRealWord = theAnswer;
               }
             });
 
@@ -193,14 +193,15 @@ function letterChip(letter) {
  * the word as a large white "chip" below the text box.
  */
 function wordSubmissionChip(wordSubmission) {
+    // a chip to display the word
     var wordChip = $("<span></span>")
         .text(wordSubmission.word)
         .attr("class", "tag tag-lg word-submission");
 
     // if we know the status of this word (real word or not), then add a green score or red X
     if (wordSubmission.hasOwnProperty("isRealWord")) {
-        var scoreChip = $("<span></span>")
-          .text(wordScore(wordSubmission));
+        // a smaller chip to indicate how many points the word is worth
+        var scoreChip = $("<span></span>").text("⟐");
         // TODO 17
         // give the scoreChip appropriate text content
 
@@ -209,11 +210,11 @@ function wordSubmissionChip(wordSubmission) {
 
         // TODO 16
         // append scoreChip into wordChip
+        wordChip.append(scoreChip);
+    };
 
-    }
-
-    return wordChip.append(scoreChip);
-}
+    return wordChip;
+};
 
 /**
  * Given a disallowed letter, returns a DOM element to display the letter
@@ -330,7 +331,7 @@ function letterScore(letter) {
  */
 function wordScore(word) {
     // split the word into a list of letters
-    // var letters = word.split("");
+    var letters = word.split("");
 
     // TODO 19
     // Replace the empty list below.
