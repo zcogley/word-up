@@ -50,10 +50,11 @@ function endGame() {
  * a wordSubmission whose word is the same
  */
 function addNewWordSubmission(word) {
-    // Do we already have a wordSubmission with this word?
-    // TODO 21
-    // replace the hardcoded 'false' with the real answer
-  const alreadyUsed = false;
+  // determines whether word has previously been used
+  let alreadyUsed = false;
+  model.wordSubmissions.forEach((item) => {
+    if (word === item.word) {alreadyUsed = true;}
+  });
 
     // if the word is valid and hasn't already been used, add it
   if (containsOnlyAllowedLetters(word) && alreadyUsed == false) {
