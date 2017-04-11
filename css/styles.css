@@ -46,6 +46,14 @@ main {
     font-weight: normal;
 }
 
+.real {
+  background-color: blue;
+}
+
+.not-real {
+  background-color: red;
+}
+
 .allowed-letter {
     font-size: 40px;
     color: orange;

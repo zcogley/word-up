@@ -190,7 +190,7 @@ function letterChip(letter) {
  */
 function wordSubmissionChip(wordSubmission) {
     // a chip to display the word
-  const wordChip = $('<span></span>')
+  var wordChip = $('<span></span>')
         .text(wordSubmission.word)
         .attr('class', 'tag tag-lg word-submission');
 
@@ -198,16 +198,19 @@ function wordSubmissionChip(wordSubmission) {
   if (wordSubmission.hasOwnProperty('isRealWord')) {
         // a smaller chip to indicate how many points the word is worth
     const scoreChip = $('<span></span>');
-    let txt = '';
-        // TODO 17
-        // gives the scoreChip appropriate text content
-    if (wordSubmission.isRealWord === true)
-    { txt = wordScore(wordSubmission.word); }
-    else { txt = 'X'; }
 
-    scoreChip.text(txt);
-        // TODO 18
-        // give the scoreChip appropriate css classes
+        // gives the scoreChip appropriate text content and css classes
+    if (wordSubmission.isRealWord === true) {
+      txt = wordScore(wordSubmission.word);
+      cls = 'tag tag-sm real';}
+    else {
+      txt = 'X';
+      cls = 'tag tag-sm not-real';
+  }
+    // adds correct text and classes to scoreChip
+    scoreChip
+      .text(txt)
+      .addClass(cls);
 
         // appends scoreChip into wordChip
     wordChip.append(scoreChip);
